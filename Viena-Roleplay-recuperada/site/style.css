@@ -1,0 +1,11 @@
+/* Na publicação, este arquivo é substituído pelo CSS original do site Viena. */
+@import url("https://alaska-ui.github.io/viena-regras1/style.css");
+/* As páginas Markdown viram capítulos: evite repetir o título no conteúdo. */
+.subcategory-section .rule .rule-content > h3 { display: none !important; }
+.rule-toc button[data-scroll-rule] { display: none !important; }
+/* Garantia adicional: cursor comum e nenhum rastro personalizado. */
+html.viena-cursor-active, html.viena-cursor-active *, html.viena-cursor-active a,
+html.viena-cursor-active button, html.viena-cursor-active input,
+html.viena-cursor-active textarea, html.viena-cursor-active select,
+html.viena-cursor-active [role="button"] { cursor: auto !important; }
+.custom-cursor, .cursor-paint, #cursorDot { display: none !important; }

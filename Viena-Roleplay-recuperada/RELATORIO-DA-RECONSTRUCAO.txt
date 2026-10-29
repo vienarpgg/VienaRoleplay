@@ -1,0 +1,19 @@
+VIENA ROLEPLAY — RESUMO DA VERSÃO PREPARADA
+
+- Projeto original recebido preservado em docs/.
+- 57 capítulos Markdown distribuídos em 9 categorias gerados para o site.
+- Site com a estrutura visual e os componentes do site público antigo da Viena.
+- Cursor personalizado desativado; cursor padrão do sistema restaurado.
+- Bolinha e rastro de tinta ocultados/removidos.
+- Efeito de letras caindo mantido.
+- Pesquisa, menu lateral, subcategorias, sumário e botões usam a estrutura antiga.
+- Workflow de GitHub Pages publica a pasta site/ e baixa, no momento do deploy, os arquivos CSS/JS e uploads originais do repositório público alaska-ui/viena-regras1.
+
+IMPORTANTE
+O ZIP não contém o código original completo de app.js/style.css nem a pasta uploads, por isso o workflow baixa esses arquivos no GitHub Actions. Depois da publicação, os arquivos baixados são incluídos no artefato publicado, e o site não precisa buscá-los no repositório antigo a cada visita. Uma futura publicação requer que o repositório antigo continue público e acessível, a menos que seus arquivos sejam copiados manualmente para o projeto.
+
+PUBLICAÇÃO
+1. Descompacte o ZIP e envie o conteúdo da pasta para a raiz do repositório vienarpgg/central-de-regras-viena, substituindo os arquivos correspondentes.
+2. Em Settings > Pages, selecione GitHub Actions como fonte de publicação.
+3. Em Actions, confira a execução de "Deploy Viena Roleplay to GitHub Pages".
+4. O site esperado é https://vienarpgg.github.io/central-de-regras-viena/.

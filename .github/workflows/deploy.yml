@@ -1,0 +1,82 @@
+name: Deploy Viena Roleplay to GitHub Pages
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      # Regras e configurações agora são publicadas pelo Editor Visual, diretamente nos JSON.
+      # Não regenere rules.json a partir de docs/ a cada commit, senão as edições do editor seriam sobrescritas.
+      - name: Download the original public Viena UI and assets
+        shell: bash
+        run: |
+          set -euo pipefail
+          curl -fL --retry 3 --retry-delay 2 \
+            https://github.com/alaska-ui/viena-regras1/archive/refs/heads/main.zip \
+            -o /tmp/viena-original.zip
+          mkdir -p /tmp/viena-original
+          unzip -q /tmp/viena-original.zip -d /tmp/viena-original
+          original_dir="$(find /tmp/viena-original -mindepth 1 -maxdepth 1 -type d | head -n 1)"
+          test -f "$original_dir/style.css"
+          test -f "$original_dir/app.js"
+          cp "$original_dir/style.css" "Viena-Roleplay-recuperada/site/style.css"
+          cp "$original_dir/app.js" "Viena-Roleplay-recuperada/site/app.js"
+          if [ -f "$original_dir/logo-viena.png" ]; then cp "$original_dir/logo-viena.png" "Viena-Roleplay-recuperada/site/logo-viena.png"; fi
+          if [ -d "$original_dir/uploads" ]; then cp -a "$original_dir/uploads" "Viena-Roleplay-recuperada/site/uploads"; fi
+          cat >> "Viena-Roleplay-recuperada/site/style.css" <<'CSS'
+
+          /* Cursor padrão do sistema: sem cursor customizado, bolinha ou rastro. */
+          html.viena-cursor-active,
+          html.viena-cursor-active *,
+          html.viena-cursor-active a,
+          html.viena-cursor-active button,
+          html.viena-cursor-active input,
+          html.viena-cursor-active textarea,
+          html.viena-cursor-active select,
+          html.viena-cursor-active [role="button"] { cursor: auto !important; }
+          .custom-cursor, .cursor-paint, #cursorDot, #customCursor { display: none !important; }
+          CSS
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          p = Path('Viena-Roleplay-recuperada/site/content/site.json')
+          d = json.loads(p.read_text(encoding='utf-8'))
+          d.setdefault('cursor', {})['enabled'] = False
+          d.setdefault('cursor', {})['trail_enabled'] = False
+          p.write_text(json.dumps(d, ensure_ascii=False, indent=2) + '\n', encoding='utf-8')
+          PY
+
+      - name: Setup Pages
+        uses: actions/configure-pages@v5
+
+      - name: Upload site artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: Viena-Roleplay-recuperada/site
+
+  deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4

@@ -1,0 +1,9 @@
+{
+  "name": "central-de-regras-viena",
+  "private": true,
+  "version": "2.0.0",
+  "description": "Central de regras da Viena Roleplay com visual baseado no site original.",
+  "scripts": {
+    "rules:build": "python gerar_regras.py"
+  }
+}

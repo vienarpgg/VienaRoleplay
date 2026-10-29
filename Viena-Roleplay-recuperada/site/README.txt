@@ -1,0 +1,1 @@
+Esta pasta é o artefato público do site. O workflow GitHub Actions traz style.css, app.js e uploads do repositório original alaska-ui/viena-regras1 e acrescenta as correções do cursor e da renderização dos capítulos.
